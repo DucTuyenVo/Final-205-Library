@@ -158,10 +158,12 @@ class Users:
         cursor_book.close()
         late_payment = 0
         format_string = '{column0:^34}{column1:^34}{column2:^34}{column3:^34}{column4:^34}'
-        print(format_string.format(column0='Book ID', column1='Book name', column2='Author', column3='Genre', column4='Late fee'))
+        print(format_string.format(column0='Book ID', column1='Book name', column2='Author', column3='Genre',
+                                   column4='Late fee'))
         for row in range(len(list_books)):
             if list_books[row].borrow_date + datetime.timedelta(days=30) < datetime.date.today():
-                print(format_string.format(column0=list_books[row].book_id, column1=list_books[row].book_name, column2=list_books[row].author,
+                print(format_string.format(column0=list_books[row].book_id, column1=list_books[row].book_name,
+                                           column2=list_books[row].author,
                                            column3=list_books[row].genre, column4=list_books[row].late_fee))
                 late_payment += list_books[row].late_fee
         if late_payment == 0:
@@ -251,6 +253,46 @@ class Librarian(Users):
         print('Payment successes!')
         print('New payment of User ID/Email: {} is: {}$ '.format(l_borrower_id_email, new_payment))
         cursor_borrower.close()
+
+    def get_lost_books(self):
+        get_lost_books_query = '''SELECT * 
+                                  FROM Books
+                                  WHERE BorrowerID = -1'''
+        list_books = []
+        cursor_book = conn.cursor()
+        cursor_book.execute(get_lost_books_query)
+        i = 0
+        for row in cursor_book:
+            list_books.append(Books())
+            list_books[i].book_id = row[0]
+            list_books[i].book_name = row[1]
+            list_books[i].author = row[2]
+            list_books[i].genre = row[3]
+            list_books[i].borrow_date = row[5]
+            list_books[i].late_fee = float(row[4])
+            list_books[i].lost = row[6]
+            list_books[i].borrower_id = row[7]
+            i += 1
+        cursor_book.close()
+        lost_payment = 0
+        format_string = '{column0:^34}{column1:^34}{column2:^34}{column3:^34}{column4:^34}'
+        print(title_format.format(title='LOST BOOKS LIST'))
+        print(format_string.format(column0='BOOK ID', column1='BOOK NAME', column2='AUTHOR', column3='GENRE',
+                                   column4='LOST FEE'))
+        for row in range(len(list_books)):
+            print(format_string.format(column0=list_books[row].book_id, column1=list_books[row].book_name,
+                                       column2=list_books[row].author,  # lost payment equals late fee * 3
+                                       column3=list_books[row].genre, column4=list_books[row].late_fee * 3))
+            lost_payment += list_books[row].late_fee * 3
+        print()
+        if lost_payment == 0:
+            print()
+            print(Fore.BLUE + title_format.format(title='No book is reported lost'))
+            print(Fore.WHITE)
+        else:
+            print()
+            print(Fore.RED + title_format.format(title='Total lost fee has to collect is: ' + str(lost_payment) + '$'))
+            print(Fore.WHITE)
 
 
 class Borrower(Users):
@@ -409,8 +451,7 @@ def librarian_menu():
     print('Press 2 to create new librarian')
     print('Press 3 to delete a books')
     print('Press 4 to see all lost books')
-    print('Press 5 to see all late books')
-    print('Press 6 to process user payment')
+    print('Press 5 to process user payment')
     print('Press 0 to return main menu')
     x = int(input())
     return x
@@ -435,8 +476,8 @@ while user_input != 0:
     if user_input == 1:
         # email = input('Enter your email to login: ')
         # password = getpass.getpass('Enter password: ')
-        # email = 'rrey@my.bcit.ca'
-        # password = 'Pa$$w0rd'
+        email = 'rrey@my.bcit.ca'
+        password = 'Pa$$w0rd'
         email = 'dvo12@my.bcit.ca'
         password = 'Pa$$w0rd'
         login_borrower = get_borrower(email, password)
@@ -506,12 +547,12 @@ while user_input != 0:
                     login_borrower.print_empty_line(1)
                 # listing all the lost books
                 elif librarian_control == 4:
-                    pass
-                # listing all late books
-                elif librarian_control == 5:
-                    pass
+                    login_librarian.get_lost_books()
+                    login_librarian.print_empty_line(1)
+                    librarian_control = librarian_menu()
+                    login_librarian.print_empty_line(1)
                 # process user payment(DONE!!!!)
-                elif librarian_control == 6:
+                elif librarian_control == 5:
                     login_librarian.print_empty_line(1)
                     login_librarian.payment()
                     login_librarian.print_empty_line(1)
