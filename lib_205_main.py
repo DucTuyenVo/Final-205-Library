@@ -21,6 +21,8 @@ def create_user_account():
     insert_user_query = '''INSERT INTO Borrowers(FirstName, LastName, Password, Email, Payment, FavoriteGenre)
                                   VALUES (?,?,?,?,?,?);'''
     # get user inputs
+    print(title_format.format(title='ENTER THESE INFORMATION BELOW TO REGISTER'))
+    print()
     first_name = input('Enter your first name: ')
     last_name = input('Enter your last name: ')
     l_password = getpass.getpass('Enter your password: ')
@@ -350,10 +352,10 @@ class Borrower(Users):
         print()
         return_book_id = input('Enter ID\'s returning book: ')
         reset_borrower_id_query = '''UPDATE Books
-                                    SET BorrowerID = 0
+                                    SET BorrowerID = 0, BorrowDate = ?
                                     WHERE BookID = ?'''
         cursor_book = conn.cursor()
-        cursor_book.execute(reset_borrower_id_query, return_book_id)
+        cursor_book.execute(reset_borrower_id_query, datetime.date.today(), return_book_id)
         cursor_book.commit()
         cursor_book.close()
 
@@ -439,32 +441,93 @@ class Books:
 
 
 def menu():
-    print('Enter 1 to login')
-    print('Enter 2 to register')
-    print('Enter 0 to exit 205 Library')
-    x = int(input())
+    x = -1
+    while x != 0:
+        try:
+            print('Enter 1 to login')
+            print('Enter 2 to register')
+            print('Enter 0 to exit 205 Library')
+            x = int(input('Enter a number: '))
+            if x < 0 or x > 2:
+                raise ValueError('Invalid input')
+            elif x == 1:
+                break
+            elif x == 2:
+                break
+            elif x == 0:
+                break
+
+        except ValueError as excerpt:
+            print(Fore.RED)
+            print(excerpt)
+            print(Fore.WHITE)
+            print('Please enter from 0 to 2 to use the program')
+            print()
     return x
 
 
 def librarian_menu():
-    print('Press 1 to create new book')
-    print('Press 2 to create new librarian')
-    print('Press 3 to delete a books')
-    print('Press 4 to see all lost books')
-    print('Press 5 to process user payment')
-    print('Press 0 to return main menu')
-    x = int(input())
+    x = -1
+    while x != 0:
+        try:
+            print('Press 1 to create new book')
+            print('Press 2 to create new librarian')
+            print('Press 3 to delete a books')
+            print('Press 4 to see all lost books')
+            print('Press 5 to process user payment')
+            print('Press 0 to return main menu')
+            x = int(input('Enter a number: '))
+            if x < 0 or x > 5:
+                raise ValueError('Invalid input')
+            elif x == 1:
+                break
+            elif x == 2:
+                break
+            elif x == 0:
+                break
+            elif x == 3:
+                break
+            elif x == 4:
+                break
+            elif x == 5:
+                break
+
+        except ValueError as excerpt:
+            print(Fore.RED)
+            print(excerpt)
+            print(Fore.WHITE)
+            print('Please enter from 0 to 5 to use the program')
+            print()
     return x
 
 
 def borrower_menu():
-    print('Press 1 to borrow new book')
-    print('Press 2 to return a book')
-    print('Press 3 to report lost')
-    print('Press 0 to return main menu')
-    x = int(input())
-    return x
+    x = -1
+    while x != 0:
+        try:
+            print('Press 1 to borrow new book')
+            print('Press 2 to return a book')
+            print('Press 3 to report lost')
+            print('Press 0 to return main menu')
+            x = int(input('Enter a number here: '))
+            if x < 0 or x > 3:
+                raise ValueError('Invalid input')
+            elif x == 1:
+                break
+            elif x == 2:
+                break
+            elif x == 0:
+                break
+            elif x == 3:
+                break
 
+        except ValueError as excerpt:
+            print(Fore.RED)
+            print(excerpt)
+            print(Fore.WHITE)
+            print('Please enter from 0 to 3 to use the program')
+            print()
+    return x
 
 # ====================================================
 # ======================= MAIN =======================
