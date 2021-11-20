@@ -450,11 +450,7 @@ def menu():
             x = int(input('Enter a number: '))
             if x < 0 or x > 2:
                 raise ValueError('Invalid input')
-            elif x == 1:
-                break
-            elif x == 2:
-                break
-            elif x == 0:
+            else:
                 break
 
         except ValueError as excerpt:
@@ -479,17 +475,7 @@ def librarian_menu():
             x = int(input('Enter a number: '))
             if x < 0 or x > 5:
                 raise ValueError('Invalid input')
-            elif x == 1:
-                break
-            elif x == 2:
-                break
-            elif x == 0:
-                break
-            elif x == 3:
-                break
-            elif x == 4:
-                break
-            elif x == 5:
+            else:
                 break
 
         except ValueError as excerpt:
@@ -512,13 +498,7 @@ def borrower_menu():
             x = int(input('Enter a number here: '))
             if x < 0 or x > 3:
                 raise ValueError('Invalid input')
-            elif x == 1:
-                break
-            elif x == 2:
-                break
-            elif x == 0:
-                break
-            elif x == 3:
+            else:
                 break
 
         except ValueError as excerpt:
@@ -537,12 +517,12 @@ def borrower_menu():
 user_input = menu()
 while user_input != 0:
     if user_input == 1:
-        # email = input('Enter your email to login: ')
-        # password = getpass.getpass('Enter password: ')
-        email = 'rrey@my.bcit.ca'
-        password = 'Pa$$w0rd'
-        email = 'dvo12@my.bcit.ca'
-        password = 'Pa$$w0rd'
+        email = input('Enter your email to login: ')
+        password = getpass.getpass('Enter password: ')
+#        email = 'rrey@my.bcit.ca'
+#        password = 'Pa$$w0rd'
+#        email = 'dvo12@my.bcit.ca'
+#        password = 'Pa$$w0rd'
         login_borrower = get_borrower(email, password)
         login_librarian = get_librarian(email, password)
         os.system('cls')
