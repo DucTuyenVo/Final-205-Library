@@ -139,6 +139,7 @@ class Users:
         cursor_book.close()
 
     def get_late_books(self, l_borrower_id=0):
+        # need to be fix
         cursor_book = conn.cursor()
 
         get_late_books_query = '''SELECT * FROM Books
@@ -202,13 +203,14 @@ class Librarian(Users):
         cursor_librarian.close()
 
     def delete_books(self):
-        name_or_id = input('Enter book\'s name or book\'s ID to delete')
+        name_or_id = input('Enter book\'s name or book\'s ID to delete: ')
         delete_book_query = '''DELETE FROM Books
                                 WHERE BookID = ? OR BookName = ?'''
         cursor_book = conn.cursor()
         cursor_book.execute(delete_book_query, name_or_id, name_or_id)
         cursor_book.commit()
         cursor_book.close()
+        print()
         print('{} is deleted'.format(name_or_id))
 
     def get_lost_books(self):
@@ -307,6 +309,7 @@ class Borrower(Users):
         pass
 
     def borrow_books(self, l_borrower_id):
+        #step 1
         book_id = input('Enter book\'s ID to borrow:')
         get_book_info_query = '''SELECT * FROM Books
                                 WHERE BookID = ?'''
@@ -315,8 +318,12 @@ class Borrower(Users):
                                 SET BorrowerID = ?, BorrowDate = ?
                                 WHERE BookID = ?'''
         today = str(datetime.datetime.today())
+        # create a cursor point to database(205_lib)
         cursor_book = conn.cursor()
+        # run query to get book's info, step 2
         cursor_book.execute(get_book_info_query, book_id)
+
+        # transfer book information into book object
         a_book = Books()
         for row in cursor_book:
             a_book.book_id = row[0]
@@ -575,14 +582,21 @@ while user_input != 0:
             while librarian_control != 0:
                 # create new books(Done!!!!)
                 if librarian_control == 1:
+                    login_librarian.print_empty_line(1)
                     login_librarian.create_book()
+                    login_librarian.print_empty_line(1)
                     librarian_control = librarian_menu()
                 # create new librarian(DONE!!!)
                 elif librarian_control == 2:
+                    login_librarian.print_empty_line(1)
                     login_librarian.create_librarians()
+                    login_librarian.print_empty_line(1)
+                    print('Librarian account created successfully!')
+                    login_librarian.print_empty_line(1)
                     librarian_control = librarian_menu()
                 # delete a book(DONE!!!!!)
                 elif librarian_control == 3:
+                    login_librarian.print_empty_line(1)
                     login_librarian.delete_books()
                     login_borrower.print_empty_line(1)
                     key = input('Press any key to continue')
