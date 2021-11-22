@@ -5,7 +5,7 @@ import os
 import colorama
 from colorama import init, Fore, Back, Style
 
-# initiation colorama for window env
+# initiation colorama in window env
 init()
 # os.system('cls')
 title_format = '{title:^172}'
@@ -431,10 +431,6 @@ class Borrower(Users):
         cursor_book.close()
 
 
-#    def warning_late_books(self):
-#        pass
-
-
 class Books:
     def __init__(self):
         self.book_id = -1
@@ -454,7 +450,7 @@ def menu():
             print('Enter 1 to login')
             print('Enter 2 to register')
             print('Enter 0 to exit 205 Library')
-            x = int(input('Enter a number: '))
+            x = int(input('Input: '))
             if x < 0 or x > 2:
                 raise ValueError('Invalid input')
             else:
